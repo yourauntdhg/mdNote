@@ -24,5 +24,5 @@
 
 ## 转载博客
 
-[Redis 基础数据类型](https://yourauntdhg.github.io/mdNote/#/转载博客/Redis 基础数据类型)
+[Redis 基础数据类型](https://yourauntdhg.github.io/mdNote/#/转载博客/Redis%20基础数据类型)
 
