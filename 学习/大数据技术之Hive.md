@@ -43,3 +43,28 @@ graph LR
 ## 1.3Hive架构原理
 
 ![Hive架构](../img/Hive架构图.jpeg)
+
+1. 用户接口：Client
+
+   CLI(command-line interface)、JDBC\ODBC（jdbc访问hive）、WEBUI（浏览器访问hive）。
+
+2. 元数据：Metastore
+
+   元数据包括：表名、表所属的数据库（默认是default）、表的拥有者、列/分区字段、表的类型（是否是外部表）、表的数据所在目录；
+
+   <font color=red>默认存储在自带的derby数据库中，推荐使用MySQL存储Metastore。</font>
+
+3. Hadoop
+
+   使用HDFS进行存储，使用MapReduce进行计算。
+
+4. 驱动器：Driver
+
+   1. 解析器（SQL Parser）：将SQL字符串转换成抽象语法树AST，这一步一般都用第三方工具库完成，比如antlr；对AST进行语法分析，比如表是否存在、字段是否存在、SQL语义是否有误。
+   2. 编译器（Physical Plan）：将AST编译生成逻辑执行计划。
+   3. 优化器（Query Optimizer）：对逻辑执行计划进行优化。
+   4. 执行器（Execution）：把逻辑执行计划转换成可以运行的物理计划。对于Hive来说就是MR/Spark。
+
+![Hive运行机制图](..\img\Hive运行机制图.png)
+
+Hive通过给用户提供一系列交互接口，接受到用户的指令（SQL），使用自己的Driver，结合元数据（Metastore)，将这些指令翻译成MapReduce，提交到Hadoop中执行，最后，将执行返回的结果输出到用户交互接口。
