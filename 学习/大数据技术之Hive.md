@@ -24,7 +24,7 @@ graph LR
 	H-->C
 ```
 
-## 1.2Hive的优缺点
+## 1.2 Hive的优缺点
 
 1. 优点
    1. 操作接口采用SQL语法，提供快速开发的能力（简单，易上手）。
@@ -40,7 +40,7 @@ graph LR
       - Hive自动生成的MapReduce作业，通常不够智能化。
       - Hive调优比较困难，粒度较粗。
 
-## 1.3Hive架构原理
+## 1.3 Hive架构原理
 
 ![Hive架构](../img/Hive架构图.jpeg)
 
@@ -64,7 +64,50 @@ graph LR
    2. 编译器（Physical Plan）：将AST编译生成逻辑执行计划。
    3. 优化器（Query Optimizer）：对逻辑执行计划进行优化。
    4. 执行器（Execution）：把逻辑执行计划转换成可以运行的物理计划。对于Hive来说就是MR/Spark。
+   
+   ![Hive运行机制图](..\img\Hive运行机制图.png)
+   
+   Hive通过给用户提供一系列交互接口，接受到用户的指令（SQL），使用自己的Driver，结合元数据（Metastore)，将这些指令翻译成MapReduce，提交到Hadoop中执行，最后，将执行返回的结果输出到用户交互接口。
 
-![Hive运行机制图](..\img\Hive运行机制图.png)
+## 1.4Hive 和数据库比较
 
-Hive通过给用户提供一系列交互接口，接受到用户的指令（SQL），使用自己的Driver，结合元数据（Metastore)，将这些指令翻译成MapReduce，提交到Hadoop中执行，最后，将执行返回的结果输出到用户交互接口。
+由于Hive采用了类似SQL的查询语言HQL（Hive Query Language），因此很容易将Hive理解为数据库。其实从结构上来看，Hive和数据库除了拥有相似的查询语言，再无类似之处。本文将从多个方面来阐述Hive和数据库的差异。数据库可以用来Online的应用中，但是Hive是为数据仓库而设计的，清楚这一点，有利于从应用角度理解Hive的特性。
+
+### 1.4.1 查询语言
+
+由于SQL被广泛应用在数据仓库中，因此，专门针对Hive的特性设计了类SQL的查询语言HQL。熟悉SQL开发的开发这可以很方便的使用Hive进行开发。
+
+### 1.4.2 数据更新
+
+由于Hive是针对数据仓库应用设计的，而<font color=red>数据仓库的内容是读多写少的</font>。因此，<font color=red>Hive中不建议对数据的改写，所有的数据都是加载的时候确定好的</font>。而数据库中的数据通常是需要经常进行修改的。因此可以使用INSERT INTO ... VALUES...添加数据，使用UPDATE...SET修改数据。
+
+### 1.4.3 执行延迟
+
+Hive在查询数据的时候，由于没有索引，需要扫描整个表，因此延迟较高。另外一个导致Hive执行延迟高的因素是MapReduce框架。由于MapReduce本身具有较高的延迟，因此再利用MapReduce执行Hive查询时，也会有较高的延迟。相对的，数据库的执行延迟较低。当然，这个低是有条件的，即数据规模较小，当数据规模达到查过数据库的处理能力的时候，Hive的并行计算显然能体现出优势。
+
+### 1.4.4 数据规模
+
+由于Hive建立在集群上并可以利用MapReduce进行并行计算，因此可以支持很大规模的数据；对应的，数据库可以支持的数据规模较小。
+
+|            | 查询语言 | 数据操作         | 执行延迟                                       | 数据规模                   |
+| ---------- | -------- | ---------------- | ---------------------------------------------- | -------------------------- |
+| Hive       | HQL      | 读多写少         | 高，因素：MapReduce本身具有延迟；加上没有索引  | 大规模集群数据             |
+| 一般数据库 | SQL      | 通常需要修改数据 | 规模较小时，执行效率高，规模越大，执行效率越低 | 单机数据或其他小规模数据体 |
+
+> 本章小Tip：Hive引擎有mr、spark、tez
+
+# 第二章 Hive安装
+
+## 2.1 Hive安装地址
+
+1. Hive官网地址：<http://hive.apache.org/>
+2. 文档查看地址：<https://cwiki.apache.org/confluence/display/Hive/GettingStarted>
+3. 下载地址：<http://archive.apache.org/dist/hive>
+4. github地址：<https://github.com/apache/hive>
+
+
+
+## 2.2 Hive安装部署
+
+### 2.2.1 安装Hive
+
