@@ -22,7 +22,12 @@
 
 [大数据技术之Hive](https://yourauntdhg.github.io/mdNote/#/学习/大数据技术之Hive)
 
-## 转载博客
+## 博客
 
-[Redis 基础数据类型](https://yourauntdhg.github.io/mdNote/#/转载博客/Redis%20基础数据类型)
+[Redis 基础数据类型](https://yourauntdhg.github.io/mdNote/#/博客/Redis%20基础数据类型)
 
+[网站](https://yourauntdhg.github.io/mdNote/#/博客/网站)
+
+[异常总结](https://yourauntdhg.github.io/mdNote/#/博客/异常总结)
+
+[各个系统安装Mysql](https://yourauntdhg.github.io/mdNote/#/博客/各个系统安装Mysql)
