@@ -117,10 +117,89 @@ hash是一个string类型的field和value的映射表。 它适合用于存储�
 
 ### 介绍
 
+- Redis 的 Set 是 String 类型的无序集合。集合成员是唯一的，这就意味着集合中不能出现重复的数据。
+
+- 集合对象的编码可以是 intset 或者 hashtable。
+
+- Redis 中集合是通过哈希表实现的，所以添加，删除，查找的复杂度都是 O(1)。
+
+-  集合中最大的成员数为 232  - 1 (4294967295, 每个集合可存储40多亿个成员)。 
+
 ### 命令
+
+- 添加一个或多个成员到命令中：` SADD KEY_NAME VALUE1..VALUEN`
+
+  > 假如集合 key 不存在，则创建一个只包含添加的元素作成员的集合。
+  >
+  > 当集合 key 不是集合类型时，返回一个错误。
+  >
+  > *注意：在 Redis2.4 版本以前， SADD 只接受单个成员值。*
+
+- 返回集合中元素的数量：`SCARD KEY_NAME `
+
+- 返回第一个集合与其他集合之间的差异：`SDIFF FIRST_KEY OTHER_KEY1..OTHER_KEYN`
+
+  > 不存在的集合 key 将视为空集。
+  >
+  > 差集的结果来自前面的 FIRST_KEY ,而不是后面的 OTHER_KEY1，也不是整个 FIRST_KEY OTHER_KEY1..OTHER_KEYN  的差集。
+
+- 将给定集合之间的差集存储在指定的集合中：`SDIFFSTORE DESTINATION_KEY KEY1..KEYN`
+
+  > 如果指定的集合 key 已存在，则会被覆盖。
+
+- 返回给定所有集合的交集：`SINTER KEY KEY1..KEYN`
+
+  > 不存在的集合 key 被视为空集。 当给定集合当中有一个空集时，结果也为空集(根据集合运算定律)。
+
+- 返回给定所有集合的交集并存储在DESTINATION_KEY中：`SINTERSTORE DESTINATION_KEY KEY KEY1..KEYN`
+
+- 判断 member 元素是否是集合 key 的成员：`SISMEMBER KEY VALUE`
+
+- 返回集合中的所有成员：`SMEMBERS key`
+
+- 将 member 元素从 source 集合移动到 destination 集合：`SMOVE source destination member`
+
+  > MOVE 是原子性操作。
+  >
+  > 如果 source 集合不存在或不包含指定的 member 元素，则 SMOVE 命令不执行任何操作，仅返回 0 。否则， member 元素从 source 集合中被移除，并添加到 destination 集合中去。
+  >
+  > 当 destination 集合已经包含 member 元素时， SMOVE 命令只是简单地将 source 集合中的 member 元素删除。
+  >
+  > 当 source 或 destination 不是集合类型时，返回一个错误。
+
+- 移除并返回集合中的一个随机元素：`SPOP key`
+
+  > 该命令类似 [Srandmember](https://www.runoob.com/redis/sets-srandmember.html) 命令，但 SPOP 将随机元素从集合中移除并返回，而 Srandmember 则仅仅返回随机元素，而不对集合进行任何改动。
+
+- 返回集合中一个或多个随机数：`SRANDMEMBER key [count]`
+
+  > 从 Redis 2.6 版本开始， Srandmember 命令接受可选的 count 参数：
+  >
+  > - 如果 count 为正数，且小于集合基数，那么命令返回一个包含 count 个元素的数组，数组中的元素各不相同。如果 count 大于等于集合基数，那么返回整个集合。
+  > - 如果 count 为负数，那么命令返回一个数组，数组中的元素可能会重复出现多次，而数组的长度为 count 的绝对值。
+  >
+  > 该操作和 SPOP 相似，但 SPOP 将随机元素从集合中移除并返回，而 Srandmember 则仅仅返回随机元素，而不对集合进行任何改动。
+
+- 移除集合中一个或多个成员：`SREM key member1 [member2]`
+
+  > 当 key 不是集合类型，返回一个错误。
+  >
+  > 在 Redis 2.4 版本以前， SREM 只接受单个成员值
+
+- 返回所有给定集合的并集：`SUNION key1 [key2]`
+
+- 所有给定集合的并集存储在 destination 集合中：`SUNIONSTORE destination key1 [key2]`
+
+- 迭代集合中的元素：`SSCAN key cursor [MATCH pattern] [COUNT count]`
+
+  - cursor - 游标。
+  - pattern - 匹配的模式。
+  - count - 指定从数据集里返回多少元素，默认值为 10 。
 
 ## zset（有序集合）
 
 ### 介绍
+
+- 
 
 ### 命令
