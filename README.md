@@ -32,5 +32,5 @@
 
 [各个系统安装Mysql](https://yourauntdhg.github.io/mdNote/#/博客/各个系统安装Mysql)
 
-## ceshi12345
+## ceshi123456
 
